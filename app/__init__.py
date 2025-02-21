@@ -4,16 +4,13 @@ from flask_migrate import Migrate
 from app.database import db
 from app.routes import init_routes
 from app.models import *  
-from app.resources import * 
+from app.resources import *
+from config import Config
 
 def create_app():
     app = Flask(__name__)
-    app.config['SERVER_PORT'] = 8080
+    app.config.from_object(Config)
     api = Api(app)
-    
-    # SQLite configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///production.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     db.init_app(app)
     Migrate(app, db)
@@ -21,3 +18,4 @@ def create_app():
     init_routes(api)
     
     return app
+
